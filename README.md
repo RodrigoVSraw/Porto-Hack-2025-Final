@@ -80,7 +80,7 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 
 ---
 
-### 👥 Equipe Brainstorming
+### 👥 Equipe Brainstorm
 
 * **[Rodrigo Raw]** - Líder e Desenvolvedor
 * **[Cássio Weissheimer]** - Desenvolvedor
