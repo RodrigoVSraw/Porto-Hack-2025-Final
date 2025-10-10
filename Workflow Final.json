@@ -1,0 +1,468 @@
+{
+  "name": "Workflow Final",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        288
+      ],
+      "id": "48267bc0-a608-472d-909e-4923a6e15334",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "bxZGbvuxyXmEw3w7",
+          "name": "OpenAi account 74"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.headers[\"x-real-ip\"] }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -240,
+        288
+      ],
+      "id": "8e6488a6-1c69-4de5-aabb-4f16feb78582",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Channel', ``, 'string') }}",
+          "mode": "id"
+        },
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_Text', ``, 'string') }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slackTool",
+      "typeVersion": 2.3,
+      "position": [
+        -112,
+        288
+      ],
+      "id": "d1e6b001-aff3-4bde-b2e2-bd3047724ecb",
+      "name": "Send a message in Slack",
+      "webhookId": "ee654453-1bfe-41c1-aea1-c56080252019",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ayD9KHxEG7ywOPQ0",
+          "name": "Slack account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.hackathon.souamigu.org.br/armador",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        16,
+        288
+      ],
+      "id": "2df05e29-2640-4ff2-aeb8-79a0314002dc",
+      "name": "Armador"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hackathon.souamigu.org.br/agencia-maritima",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        144,
+        288
+      ],
+      "id": "e361c317-5d2b-4ae8-b86c-3e7f6bf02e39",
+      "name": "Agencia Marítima"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hackathon.souamigu.org.br/autoridade-portuaria",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        288
+      ],
+      "id": "3e5d197b-dc42-41bf-9d49-5b829e9d137b",
+      "name": "Autoridade Portuária"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hackathon.souamigu.org.br/terminal-portuario",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        288
+      ],
+      "id": "c34addc6-ab29-4a12-8375-919b460e15e6",
+      "name": "Terminal Portuário"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hackathon.souamigu.org.br/rebocadores",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        496
+      ],
+      "id": "2258c6c4-2783-4bb9-bbc8-2c4bd946f25c",
+      "name": "Rebocadores"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.question }}",
+        "options": {
+          "systemMessage": "Utilize apenas o Slack\n\nAcesse a API atraves do HTTP Request e envie os dados adquiridos no slack.\n\nVocê deve encontrar o canal correto baseado no nome da API, deve ser um desses nomes: agência-marítima, autoridade-portuária, movimentação-armador, rebocadores ou terminal-portuário\n\nOlhe o statusOperacao e procure os dados do navio através da API da seção que ele se encontra, exemplo: \"statusOperacao\": \"descarga_em_andamento\" - terminal portuário, \"statusOperacao\": \"documentacao_pendente\" - agência martítica, etc\n\nToda vez que redirecionar a pesquisa de dados para outro setor, fale no slack o identificador do navio e alerte que ele foi enviado a outro setor\n\nA seção de terminal portuária é a última seção, quando algum navio chega nessa seção, pode finalizar o processo, mandando um aviso no chat correto\n\nA ordem dos processos é a seguinte: Movimentação Armador, Autoridade Portuária, Agência Marítima, Rebocadores e por fim Terminal Portuário\n\nCaso aconteça algum problema ou inconsistência nos dados em qualquer um dos setores, pare a execução do processo e lance notificaçãoes aos canais corretos exigindo correção\n\nAnalisando o statusOperacao você deve localizar o setor que o navio já se encontra e iniciar o processo por aquele setor\n\nMonte mensagens mais decoradas, com cores indicando sucesso ou fracasso, erros, etc.\n\nNo fim do processo mostre os dados do navio atualizados no canal de movimentação armador"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -48,
+        64
+      ],
+      "id": "9e4b49b2-0775-4b0c-8cfe-b028592ccf8e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.headers[\"x-real-ip\"] }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        496
+      ],
+      "id": "ec358c6f-a3ef-4ceb-b103-3de2036bef8e",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        496
+      ],
+      "id": "2c1c9556-ddd6-406a-be53-0a5eb126b17f",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "bxZGbvuxyXmEw3w7",
+          "name": "OpenAi account 74"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Agente que consulta os rebocadores ",
+        "text": "Encontre rebocadores disponíveis para o navio selecionado",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        528,
+        288
+      ],
+      "id": "991b4e8e-c84c-40b3-820c-ac8c71d51c88",
+      "name": "Agente Rebocadores"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Brainstorm",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        64
+      ],
+      "id": "8d8c7c59-fc19-4225-b13e-64bf3c1a30f1",
+      "name": "Webhook",
+      "webhookId": "332768a9-29b1-4b0c-a048-ef598dee4a0a"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Poseidon SYNC Chat</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');\n\n        :root {\n            --primary-color: #008080; /* Um tom de verde-azulado (teal) */\n            --secondary-color: #004d4d;\n            --assistant-bg: #f0f2f5;\n            --user-bg: #008080;\n            --text-light: #ffffff;\n            --text-dark: #333333;\n            --border-color: #e0e0e0;\n        }\n\n        body {\n            font-family: 'Roboto', sans-serif;\n            background-color: #e5e5e5;\n            margin: 0;\n            padding: 20px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            height: 100vh;\n        }\n\n        #chat-container {\n            width: 100%;\n            max-width: 450px;\n            height: 90vh;\n            max-height: 700px;\n            display: flex;\n            flex-direction: column;\n            background: var(--text-light);\n            border-radius: 12px;\n            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n            overflow: hidden;\n        }\n\n        #chat-header {\n            background-color: var(--primary-color);\n            color: var(--text-light);\n            padding: 15px;\n            text-align: center;\n            box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n        }\n\n        #chat-header h1 {\n            margin: 0;\n            font-size: 1.4em;\n            font-weight: 700;\n        }\n\n        #chat-header p {\n            margin: 0;\n            font-size: 0.8em;\n            opacity: 0.9;\n        }\n\n        #chat-messages {\n            flex-grow: 1;\n            padding: 20px;\n            overflow-y: auto;\n            display: flex;\n            flex-direction: column;\n            gap: 12px;\n        }\n\n        .message {\n            padding: 10px 15px;\n            border-radius: 18px;\n            max-width: 80%;\n            line-height: 1.5;\n            word-wrap: break-word;\n        }\n\n        .assistant-message {\n            background-color: var(--assistant-bg);\n            color: var(--text-dark);\n            align-self: flex-start;\n            border-bottom-left-radius: 4px;\n        }\n\n        .user-message {\n            background-color: var(--user-bg);\n            color: var(--text-light);\n            align-self: flex-end;\n            border-bottom-right-radius: 4px;\n        }\n        \n        .error-message {\n            background-color: #ffebee;\n            color: #c62828;\n            align-self: flex-start;\n            border-bottom-left-radius: 4px;\n        }\n\n        #chat-form {\n            display: flex;\n            padding: 15px;\n            border-top: 1px solid var(--border-color);\n            background: #fff;\n        }\n\n        #user-input {\n            flex-grow: 1;\n            border: 1px solid var(--border-color);\n            border-radius: 20px;\n            padding: 10px 15px;\n            font-size: 1em;\n            margin-right: 10px;\n            outline: none;\n        }\n        \n        #user-input:focus {\n            border-color: var(--primary-color);\n        }\n\n        #send-button {\n            background-color: var(--primary-color);\n            color: white;\n            border: none;\n            border-radius: 20px;\n            padding: 10px 20px;\n            font-size: 1em;\n            font-weight: 500;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n\n        #send-button:hover {\n            background-color: var(--secondary-color);\n        }\n    </style>\n</head>\n<body>\n\n<div id=\"chat-container\">\n    <div id=\"chat-header\">\n        <h1>Poseidon SYNC</h1>\n        <p>Assistente Virtual do Porto</p>\n    </div>\n    <div id=\"chat-messages\" aria-live=\"polite\">\n      </div>\n    <form id=\"chat-form\">\n        <input type=\"text\" id=\"user-input\" placeholder=\"Digno sua pergunta...\" autocomplete=\"off\">\n        <button type=\"submit\" id=\"send-button\">Enviar</button>\n    </form>\n</div>\n\n<script>\n    // URL do seu webhook n8n que processa a pergunta\n    const N8N_WEBHOOK_URL = 'https://n8n.hackathon.souamigu.org.br/webhook/Brainstorm';\n\n    const chatForm = document.getElementById('chat-form');\n    const userInput = document.getElementById('user-input');\n    const messagesContainer = document.getElementById('chat-messages');\n\n    // Evento de envio do formulário\n    chatForm.addEventListener('submit', async (event) => {\n        event.preventDefault(); // Impede o recarregamento da página\n\n        const question = userInput.value.trim();\n        if (!question) return;\n\n        // 1. Adiciona a mensagem do usuário à interface\n        addMessage(question, 'user-message');\n        userInput.value = ''; // Limpa o campo de entrada\n\n        try {\n            // 2. Envia a pergunta para o webhook n8n\n            const response = await fetch(N8N_WEBHOOK_URL, {\n                method: 'POST',\n                headers: {\n                    'Content-Type': 'application/json'\n                },\n                body: JSON.stringify({ pergunta: question })\n            });\n\n            if (!response.ok) {\n                throw new Error(`Erro na API: ${response.statusText}`);\n            }\n\n            const data = await response.json();\n            \n            // 3. Recebe a resposta e adiciona à interface\n            // A resposta do seu webhook está em `data.output`\n            // Substituímos as quebras de linha (\\n) por tags <br> para formatação HTML\n            const formattedResponse = data.output.replace(/\\\\n/g, '<br>');\n            addMessage(formattedResponse, 'assistant-message');\n\n        } catch (error) {\n            console.error('Falha ao contatar o webhook:', error);\n            const errorMessage = \"Houve um problema com o assistente. Tente novamente mais tarde.\";\n            addMessage(errorMessage, 'error-message');\n        }\n    });\n\n    /**\n     * Função para adicionar uma nova mensagem ao container do chat.\n     * @param {string} text - O conteúdo da mensagem (pode conter HTML).\n     * @param {string} className - A classe CSS para estilizar a mensagem (user-message, assistant-message, error-message).\n     */\n    function addMessage(text, className) {\n        const messageElement = document.createElement('div');\n        messageElement.classList.add('message', className);\n        messageElement.innerHTML = text; // Usamos innerHTML para renderizar tags como <br>\n        messagesContainer.appendChild(messageElement);\n\n        // Rola para a mensagem mais recente\n        messagesContainer.scrollTop = messagesContainer.scrollHeight;\n    }\n\n</script>\n\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -448,
+        1040
+      ],
+      "id": "f85ad3c1-92e4-4a52-92bd-2f8b935536a5",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "path": "index",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -672,
+        1040
+      ],
+      "id": "0d287993-9f5d-4e5a-bd17-0cf492c22bc8",
+      "name": "Webhook1",
+      "webhookId": "08a41136-b656-4490-a30e-186559f0e376"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        1040
+      ],
+      "id": "fddd88c3-bca3-4603-86ef-876a6282233c",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $item(\"0\").$node[\"AI Agent\"].json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        320,
+        64
+      ],
+      "id": "c5293b37-6341-469b-b784-1d869bc24def",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Slack": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armador": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agencia Marítima": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Autoridade Portuária": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminal Portuário": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rebocadores": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Rebocadores",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Rebocadores",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Rebocadores",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Rebocadores": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a0a103e6-65b0-47ed-baac-81cc575ad137",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "21b80bbe30a7f15da69548d8c5b1a235d4d21f49c50c6d7cd7bab88b61c1e138"
+  },
+  "id": "dDy3QuftJX1lKdr0",
+  "tags": []
+}

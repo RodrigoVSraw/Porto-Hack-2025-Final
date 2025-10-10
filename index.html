@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poseidon SYNC</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+  <header class="main-banner">
+    <div class="banner-content">
+      <a href="index.html" class="logo-area-link">
+        <div class="logo-area">
+          <img src="images/Logo-POSEIDON.png" alt="Logo Poseidon SYNC" class="logo-image">
+          <h1><span class="brand-main">POSEIDON</span> <span class="brand-accent">SYNC</span></h1>
+        </div>
+      </a>
+      <nav class="navigation">
+        <a href="login.html" class="nav-button">Login</a>
+        <a href="cadastro.html" class="nav-button">Cadastro</a>
+        <button class="menu-button" id="menu-btn" data-tooltip="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-header">
+      <h3>Menu</h3>
+      <button class="close-button" id="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <a href="https://app.slack.com/client/T09GQ5YC4BB/C09GABN2BP0" target="_blank">
+        <i class="fab fa-slack"></i> Ir para o Slack
+      </a>
+    </div>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <main class="chat-wrapper">
+
+    <aside class="left-panel">
+
+      <div class="status-widget glass-panel">
+        <div class="clock-section">
+          <div id="time-display" class="time-display">19:30:45</div>
+          <div id="date-display" class="date-display">Quinta-feira, 9 de Outubro</div>
+        </div>
+        <div class="weather-section">
+          <div class="weather-icon"><i class="fas fa-cloud-sun"></i></div>
+          <div class="weather-details">
+            <div class="weather-temp">22°C</div>
+            <div class="weather-desc">Parcialmente Nublado</div>
+          </div>
+        </div>
+        <div class="extra-info-section">
+          <div class="info-item">
+            <i class="fas fa-wind"></i>
+            <span>Vento: <strong>12 km/h</strong></span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-water"></i>
+            <span>Umidade: <strong>78%</strong></span>
+          </div>
+        </div>
+        <div class="tide-section">
+          <h4>Maré em Santos</h4>
+          <div class="tide-item">
+            <span>Maré Alta:</span>
+            <span>04:15 / 16:40</span>
+          </div>
+          <div class="tide-item">
+            <span>Maré Baixa:</span>
+            <span>10:20 / 22:50</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-widget glass-panel">
+        <h3><i class="fas fa-info-circle"></i> Sobre o Poseidon SYNC</h3>
+        <p>O POSEIDON SYNC é uma plataforma de Inteligência Artificial para otimização da comunicação e monitoramento de
+          operações portuárias.</p>
+        <p>Utilize o chat ao lado para obter informações de navios em tempo real, consultar status de stakeholders ou
+          enviar alertas para canais específicos.</p>
+        <div class="channels-section">
+          <h4>Canais de Alerta Disponíveis</h4>
+          <div class="channels-list-widget">
+            <span># agência-marítima</span>
+            <span># autoridade-portuária</span>
+            <span># movimentação-armador</span>
+            <span># rebocadores</span>
+            <span># terminal-portuário</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <div class="chat-container glass-panel">
+      <div class="chat-messages" id="chat-messages">
+        <div class="message bot">Olá! Bem-vindo ao Poseidon SYNC. Como posso ajudar?</div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="user-input" placeholder="Digite sua pergunta...">
+        <button id="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
