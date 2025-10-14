@@ -50,12 +50,12 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 
 ### 💻 Tecnologias Utilizadas
 
-#### **Frontend**
+#### ![Front-end]**Frontend**
 * **HTML5**
 * **CSS3** (Layout com Flexbox, Animações com Keyframes, Design Responsivo)
 * **JavaScript (ES6+)** (Manipulação do DOM, `fetch` API para comunicação assíncrona com o backend)
 
-#### **Backend**
+#### ![Back-end/Workflow.json]**Backend**
 * **n8n.io:** Plataforma low-code utilizada como orquestrador principal do fluxo de trabalho.
     * **Webhook:** Para receber as requisições do frontend.
     * **AI Agent:** Para processar a linguagem natural e utilizar ferramentas.
