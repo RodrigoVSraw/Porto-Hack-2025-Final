@@ -82,9 +82,9 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 
 ### 👥 Equipe Brainstorm
 
-* **[Rodrigo Raw]** - Líder e Desenvolvedor
-* **[Cássio Weissheimer]** - Desenvolvedor
-* **[Henrique Santos]** - Desenvolvedor
+* **[Rodrigo Raw]** - Líder e Desenvolvedor FullStack
+* **[Cássio Weissheimer]** - Desenvolvedor Backend
+* **[Henrique Santos]** - Desenvolvedor Backend
 * **[Vitor Pinheiro]** - Pitch, e Pesquisa
 
 ---
