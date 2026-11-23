@@ -2,7 +2,7 @@
 
 ## Um Ecossistema de Inteligência Artificial para Sincronização de Operações Portuárias
 
-> Projeto finalista do **Porto Hack Santos 2025**, desenvolvido pela equipe **Brainstorming**.
+> Projeto finalista do **Porto Hack Santos 2025**, desenvolvido pela equipe **Brainstorm**.
 
 ---
 
@@ -25,15 +25,15 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 ### 📸 Demonstração Visual
 
 **Interface Principal:**
-<img width="1873" height="966" alt="image" src="https://github.com/user-attachments/assets/002453ca-08d2-46c6-aa89-528f25aba0fa" />
+<img width="1873" height="966" alt="Página Principal" src="https://github.com/user-attachments/assets/002453ca-08d2-46c6-aa89-528f25aba0fa" />
 
 
 **Página de Login:**
-<img width="1873" height="969" alt="image" src="https://github.com/user-attachments/assets/bd7090d1-6e1d-4f0a-9b0b-3af616533892" />
+<img width="1873" height="969" alt="Tela de Login" src="https://github.com/user-attachments/assets/bd7090d1-6e1d-4f0a-9b0b-3af616533892" />
 
 
 **Interação com a IA:**
-<img width="1031" height="722" alt="image" src="https://github.com/user-attachments/assets/a2a7d8dd-35f7-45f8-9b9d-54b3fd565bde" />
+<img width="1031" height="722" alt="Chat com IA" src="https://github.com/user-attachments/assets/a2a7d8dd-35f7-45f8-9b9d-54b3fd565bde" />
 
 
 ---
@@ -73,7 +73,7 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 
 #### **Backend**
 1.  Crie uma instância do n8n.
-2.  Importe o arquivo **`Workflow Final.json`** para criar um novo workflow.
+2.  Importe o arquivo **`WorkflowFinal.json`** para criar um novo workflow.
 3.  Configure as credenciais necessárias para os nós (OpenAI, Slack, etc.).
 4.  Copie a **URL de Produção** do nó `Webhook` e cole na variável `N8N_WEBHOOK_URL` dentro do arquivo `script.js`.
 5.  **Ative** o workflow.
@@ -85,7 +85,7 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 * **[Rodrigo Raw]** - Líder e Desenvolvedor FullStack
 * **[Cássio Weissheimer]** - Desenvolvedor Backend
 * **[Henrique Santos]** - Desenvolvedor Backend
-* **[Vitor Pinheiro]** - Pitch, e Pesquisa
+* **[Vitor Pinheiro]** - Pitch e Pesquisa
 
 ---
 
