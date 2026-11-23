@@ -64,6 +64,19 @@ A plataforma consiste em uma interface web moderna com um painel de status em te
 
 ---
 
+### 🏗 Arquitetura
+
+```mermaid
+flowchart LR
+    A[Frontend JS] -->|POST /fetch| B[n8n Webhook]
+    B --> C[AI Agent / OpenAI]
+    C -->|Consulta| D[APIs Portuárias]
+    C -->|Alertas| E[Slack API]
+    C -->|Resposta| A
+```
+
+---
+
 ### 🛠️ Como Executar o Projeto
 
 #### **Frontend**
